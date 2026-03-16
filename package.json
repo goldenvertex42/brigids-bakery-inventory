@@ -1,0 +1,17 @@
+{
+  "name": "brigids-bakery-inventory",
+  "version": "1.0.0",
+  "description": "An inventory management app for an imaginary bakery created using Express and PostgreSQL",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --env-file=.env --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.1",
+    "pg": "^8.20.0"
+  }
+}
