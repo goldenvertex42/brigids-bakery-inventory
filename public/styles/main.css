@@ -1,0 +1,209 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+*:not(dialog) {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+#root, #__next {
+  isolation: isolate;
+}
+
+/* RESET END */
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+hr {
+  margin: 1rem 0;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #f4f4f4;
+  border-right: 1px solid #ddd;
+  overflow-y: auto; /* Scrollable sidebar */
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto; /* Scrollable content */
+}
+
+.alert-dot {
+  color: #ff4d4d; /* Bright red */
+  font-size: 1.2rem;
+  margin-left: auto;
+  /* Optional: make it pulse slightly */
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* --- Form Layout --- */
+.inventory-form {
+  max-width: 600px;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Space between form groups */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* --- Typography & Inputs --- */
+.form-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit; /* Ensures it matches the rest of your site */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #046bf1;
+  box-shadow: 0 0 0 2px rgba(4, 107, 241, 0.2);
+}
+
+/* --- Submit Button --- */
+.btn-submit {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background-color: #e63939;
+}
+
+.inventory-list {
+  padding-inline-start: 0;
+}
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem; /* 1.5rem on the left/right provides that "window" look */
+  margin-bottom: 0.5rem;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  transition: transform 0.1s ease;
+}
+
+/* Highlight the entire row if low stock */
+.inventory-item.low-stock {
+  border-left: 6px solid #ff4d4d; /* Slightly thicker for better visibility */
+  background-color: #fffafa;    /* Very subtle red tint */
+  padding-left: calc(1.5rem - 6px); /* Adjusts padding so text doesn't shift when border appears */
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.item-stock {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+/* Specific styling for the inline dot */
+.alert-dot.inline {
+  margin-left: 10px;
+  font-size: 1rem;
+  /* Pulsing animation is already inherited from your previous .alert-dot style */
+}
+
+.btn-edit {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f0ad4e; /* Warning/Edit orange */
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.btn-edit:hover {
+  background-color: #ec971f;
+}
