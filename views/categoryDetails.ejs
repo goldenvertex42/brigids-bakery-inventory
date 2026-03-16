@@ -1,0 +1,27 @@
+<%- include('./partials/header') %>
+<h1><%= category.name %></h1>
+<p><%= category.description %></p>
+<hr>
+<!-- views/categoryDetail.ejs -->
+<ul class="inventory-list">
+  <% items.forEach(item => { %>
+    <li class="inventory-item <%= (item.quantity_on_hand <= (item.remake_level || item.reorder_level)) ? 'low-stock' : '' %>">
+      <div class="item-info">
+        <strong><%= item.name %></strong>
+        <p><%= item.description %></p>
+        <p>$<%= item.price %> a <%= item.unit %></p>
+        <div class="item-stock">
+          <span><%= item.quantity_on_hand %> <%= item.unit %><%= item.quantity_on_hand === 1 ? '' : 's' %></span>
+          
+          <!-- The inline alert circle -->
+          <% if (item.quantity_on_hand <= (item.remake_level || item.reorder_level)) { %>
+            <span class="alert-dot inline" title="Needs Attention!">●</span>
+          <% } %>
+          </div>
+      </div>
+      <a href="/products/<%= item.id %>/edit" class="btn-edit">Update Item</a>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('./partials/footer') %>
