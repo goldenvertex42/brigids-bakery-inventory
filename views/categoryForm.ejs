@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+
+<h1>
+  <%= title %>
+</h1>
+
+<form action="<%= locals.category ? '/categories/' + category.id + '/edit' : '/categories/new' %>" method="POST">
+  <%- include('partials/error') %>
+  
+  <div class="form-group">
+    <label for="name">Category Name:</label>
+    <input type="text" id="name" name="name" value="<%= locals.formData ? formData.name : (locals.category ? category.name : '') %>" required>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="3" placeholder="Describe the category concisely..."><%= locals.formData ? formData.description : (locals.category ? category.description : '') %></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="category_type">Category Type:</label>
+    <select id="category_type" name="category_type" required>
+      <option value="" disabled <%= !locals.formData && !locals.category ? 'selected' : '' %>>Select a type</option>
+      <% categoryTypes.forEach(catType => { %>
+      <% 
+        const isFromForm = locals.formData && formData.category_type === catType;
+        
+        const isFromDB = !locals.formData && locals.category && category.category_type === catType;
+        
+        const isSelected = isFromForm || isFromDB;
+      %>
+      <option value="<%= catType %>" <%= isSelected ? 'selected' : '' %>>
+        <%= catType.charAt(0).toUpperCase() + catType.slice(1) %>
+      </option>
+      <% }); %>
+    </select>
+  </div>
+
+  <% if (locals.category) { %>
+  <div class="form-group">
+    <label for="admin_password">Admin Password (Required to save changes):</label>
+    <input type="password" id="admin_password" name="admin_password" required>
+  </div>
+  <% } %>
+
+  <button type="submit" class="btn-submit">
+    <%= locals.category ? 'Update Category' : 'Create Category' %>
+  </button>
+</form>
+<% if (locals.category) { %>
+  <hr>
+  <section class="danger-zone">
+    <h2>Danger Zone</h2>
+    <p>To delete this category (and all of its contents), enter the admin password and click Delete.</p>
+    
+    <form action="/categories/<%= category.id %>/delete" method="POST">
+      <div class="form-group">
+        <input type="password" name="admin_password" placeholder="Admin Password" required>
+      </div>
+      <button type="submit" class="btn-delete">Delete Category Permanently</button>
+    </form>
+  </section>
+<% } %>
+<%- include('partials/footer') %>
