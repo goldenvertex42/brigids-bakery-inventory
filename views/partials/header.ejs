@@ -11,7 +11,7 @@
       <ul>
         <% sidebarCategories.forEach(cat => { %>
           <li>
-            <a href="/categories/<%= cat.id %>">
+            <a href="/categories/<%= cat.id %>" class="btn-category">
               <%= cat.name %>
               <% if (cat.hasAlert) { %>
                 <span class="alert-dot" title="Low stock items detected!">●</span>
@@ -22,9 +22,11 @@
       </ul>
       <h3>Inventory Actions</h3>
       <ul class="actions-list">
-        <li><a href="/products/new" class="btn-add">+ Add New Product</a></li>
-        <li><a href="/ingredients/new" class="btn-add">+ Add New Ingredient</a></li>
-        <li><a href="/categories/new" class="btn-add">+ Add New Category</a></li>
+        <li><a href="/products/new" class="btn-sidebar">+ Add New Product</a></li>
+        <li><a href="/ingredients/new" class="btn-sidebar">+ Add New Ingredient</a></li>
+        <li><a href="/categories/new" class="btn-sidebar">+ Add New Category</a></li>
+        <li><a href="/suppliers/new" class="btn-sidebar">+ Add New Supplier</a></li>
+        <li><a href="/suppliers" class="btn-category">View All Suppliers</a></li>
       </ul>
     </nav>
     <main class="content">

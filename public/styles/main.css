@@ -54,6 +54,7 @@ a {
 
 ul {
   list-style-type: none;
+  padding-inline-start: 1rem;
 }
 
 hr {
@@ -135,9 +136,10 @@ hr {
 
 /* --- Submit Button --- */
 .btn-submit {
-  background-color: #ff4d4d;
+  background-color: #28a745;
   color: white;
   padding: 1rem;
+  margin-top: 1rem;
   border: none;
   border-radius: 4px;
   font-weight: bold;
@@ -146,7 +148,7 @@ hr {
 }
 
 .btn-submit:hover {
-  background-color: #e63939;
+  background-color: #218838;
 }
 
 .inventory-list {
@@ -192,10 +194,10 @@ hr {
   /* Pulsing animation is already inherited from your previous .alert-dot style */
 }
 
-.btn-edit {
+.btn-edit, .btn-sidebar {
   display: inline-block;
   padding: 8px 16px;
-  background-color: #f0ad4e; /* Warning/Edit orange */
+  background-color: #17a2b8;
   color: white;
   text-decoration: none;
   border-radius: 4px;
@@ -204,6 +206,55 @@ hr {
   transition: background 0.2s;
 }
 
-.btn-edit:hover {
-  background-color: #ec971f;
+.btn-edit:hover, .btn-sidebar:hover {
+  background-color: #138496;
+}
+
+.btn-sidebar, .btn-category, .btn-delete, .btn-edit, .btn-submit {
+  margin: 0.5rem 0;
+}
+
+.btn-category {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #006400;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.btn-category:hover {
+  background-color: #228B22;
+}
+
+.danger-zone {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  border: 2px dashed #ff4d4d;
+  border-radius: 8px;
+  background-color: #fff5f5;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+.errors {
+  color: red;
+  font-weight: bold;
 }
