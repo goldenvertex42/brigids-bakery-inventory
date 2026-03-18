@@ -104,7 +104,7 @@ async function categoryDeletePost(req, res, next) {
 
     await categoryDb.deleteCategory(categoryId);
 
-    res.redirect(`/categories/${categoryId}`);
+    res.redirect(`/`);
 
   } catch (err) {
     next(err);
