@@ -9,16 +9,20 @@
     <nav class="sidebar">
       <h2 class="header-name">Categories</h2>
       <ul class="categories-list">
-        <% sidebarCategories.forEach(cat => { %>
-          <li>
-            <a href="/categories/<%= cat.id %>" class="btn-category">
-              <%= cat.name %>
-            </a>
-            <% if (cat.hasAlert) { %>
-              <span class="alert-dot" title="Low stock items detected!">●</span>
-            <% } %>
-          </li>
-        <% }) %>
+        <% if (sidebarCategories && sidebarCategories.length > 0) { %>
+          <% sidebarCategories.forEach(cat => { %>
+            <li>
+              <a href="/categories/<%= cat.id %>" class="btn-category">
+                <%= cat.name %>
+              </a>
+              <% if (cat.hasAlert) { %>
+                <span class="alert-dot" title="Low stock items detected!">●</span>
+              <% } %>
+            </li>
+          <% }) %>
+        <% } else { %>
+          <li class="no-categories">There are no categories</li>
+        <% } %>
       </ul>
       <h2 class="header-name">Inventory Actions</h2>
       <ul class="actions-list">
