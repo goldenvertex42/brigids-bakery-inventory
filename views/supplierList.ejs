@@ -5,14 +5,12 @@
 <ul class="supplier-list">
   <% suppliers.forEach(supplier => { %>
     <li class="supplier">
-      <div class="supplier-info">
-        <strong><%= supplier.name %></strong>
-        <p>Contact Name: <%= supplier.contact_name %></p>
-        <p>Email: <%= supplier.email %></p>
-        <p>Phone: <%= supplier.phone %></p>
-        <p>Address: <%= supplier.address %></p>
+      <strong class="supplier-name"><%= supplier.name %></strong>
+      <div class="separator"></div>
+      <div class="link-box">
+        <a href="/suppliers/<%= supplier.id %>/edit" class="btn-edit">Update Supplier</a>
+        <a href="/suppliers/<%= supplier.id %>" class="btn-category">View Info</a>
       </div>
-      <a href="/suppliers/<%= supplier.id %>/edit" class="btn-edit">Update Supplier</a>
     </li>
   <% }) %>
 </ul>
