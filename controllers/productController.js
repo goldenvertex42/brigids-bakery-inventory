@@ -49,7 +49,7 @@ async function productUpdateGet(req, res, next) {
     if (!product) return next(new Error("Product not found"));
 
     res.render("productForm", {
-      title: "Edit Product",
+      title: "Update Product",
       product,
       categories
     })
@@ -70,7 +70,7 @@ async function productUpdatePost(req, res, next) {
       const categories = await categoryDb.getProductCategories();
       
       return res.render("productForm", { 
-        title: "Edit Product", 
+        title: "Update Product", 
         product: product, 
         categories,
         errors: errors.array(),
@@ -99,7 +99,7 @@ async function productDeletePost(req, res, next) {
     if (admin_password !== process.env.ADMIN_PASSWORD) {
       const categories = await categoryDb.getProductCategories();
       return res.render("productForm", {
-        title: "Edit Product",
+        title: "Update Product",
         product: product,
         categories,
         error: "Incorrect password! Item was not deleted."

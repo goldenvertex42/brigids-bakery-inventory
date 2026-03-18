@@ -56,11 +56,11 @@ async function ingredientUpdateGet(req, res, next) {
     if (!ingredient) return next(new Error("Ingredient not found"));
 
     res.render("ingredientForm", {
-      title: "Edit Ingredient",
+      title: "Update Ingredient",
       ingredient,
       categories,
       suppliers
-    })
+    });
   } catch (err) {
     next(err);
   }
@@ -80,8 +80,8 @@ async function ingredientUpdatePost(req, res, next) {
       const suppliers = await supplierDb.getAllSuppliers();
       
       return res.render("ingredientForm", { 
-        title: "Edit Ingredient", 
-        ingredient: ingredient[0], 
+        title: "Update Ingredient", 
+        ingredient: ingredient, 
         categories,
         suppliers,
         errors: errors.array(),
@@ -112,7 +112,7 @@ async function ingredientDeletePost(req, res, next) {
       const suppliers = await supplierDb.getAllSuppliers();
 
       return res.render("ingredientForm", {
-        title: "Edit Ingredient",
+        title: "Update Ingredient",
         ingredient: ingredient,
         categories,
         suppliers,
