@@ -1,0 +1,20 @@
+<%- include('./partials/header') %>
+<h1><%= title %></h1>
+<hr>
+
+<ul class="supplier-list">
+  <% suppliers.forEach(supplier => { %>
+    <li class="supplier">
+      <div class="supplier-info">
+        <strong><%= supplier.name %></strong>
+        <p>Contact Name: <%= supplier.contact_name %></p>
+        <p>Email: <%= supplier.email %></p>
+        <p>Phone: <%= supplier.phone %></p>
+        <p>Address: <%= supplier.address %></p>
+      </div>
+      <a href="/suppliers/<%= supplier.id %>/edit" class="btn-edit">Update Supplier</a>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('./partials/footer') %>
