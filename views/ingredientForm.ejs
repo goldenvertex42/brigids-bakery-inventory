@@ -1,0 +1,94 @@
+<%- include('partials/header') %>
+
+<h1>
+  <%= title %>
+</h1>
+
+<form action="<%= locals.ingredient ? '/ingredients/' + ingredient.id + '/edit' : '/ingredients/new' %>" method="POST">
+  <%- include('partials/error') %>
+  
+  <div class="form-group">
+    <label for="name">Ingredient Name:</label>
+    <input type="text" id="name" name="name" value="<%= locals.formData ? formData.name : (locals.ingredient ? ingredient.name : '') %>" required>
+  </div>
+
+  <div class="form-group">
+    <label for="category_id">Category:</label>
+    <select id="category_id" name="category_id" required>
+      <% categories.forEach(cat => { %>
+      <% 
+        // 1. Check if the user JUST picked this in a failed form submission
+        const isFromForm = locals.formData && Number(formData.category_id) === cat.id;
+        
+        // 2. Check if this is the product's saved category (and no new form data exists)
+        const isFromDB = !locals.formData && locals.ingredient && ingredient.category_id === cat.id;
+        
+        const isSelected = isFromForm || isFromDB;
+      %>
+      <option value="<%= cat.id %>" <%= isSelected ? 'selected' : '' %>>
+        <%= cat.name %>
+      </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="supplier_id">Supplier (Optional):</label>
+    <select name="supplier_id" id="supplier_id">
+      <option value="">-- Select a Supplier --</option>
+      <% suppliers.forEach(sup => { %>
+        <% 
+          const isSelected = (locals.formData && Number(formData.supplier_id) === sup.id) || 
+                            (!locals.formData && locals.ingredient && ingredient.supplier_id === sup.id);
+        %>
+        <option value="<%= sup.id %>" <%= isSelected ? 'selected' : '' %>>
+          <%= sup.name %>
+      </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="cost_per_unit">Cost Per Unit ($):</label>
+    <input type="number" id="cost_per_unit" name="cost_per_unit" step="0.01" min="0" value="<%= locals.formData ? formData.cost_per_unit : (locals.ingredient ? ingredient.cost_per_unit : '') %>" required>
+  </div>
+
+  <div class="form-group">
+    <label for="quantity_on_hand">Initial Stock:</label>
+    <input type="number" id="quantity_on_hand" name="quantity_on_hand" min="0" value="<%= locals.formData ? formData.quantity_on_hand : (locals.ingredient ? ingredient.quantity_on_hand : '0') %>">
+  </div>
+
+  <div class="form-group">
+    <label for="unit">Unit of Measure:</label>
+    <input type="text" id="unit" name="unit" placeholder="e.g., loaf, dozen, piece" value="<%= locals.formData ? formData.unit : (locals.ingredient ? ingredient.unit : 'piece') %>">
+  </div>
+
+  <div class="form-group">
+    <label for="reorder_level">Reorder Level (Alert threshold):</label>
+    <input type="number" id="reorder_level" name="reorder_level" min="0" value="<%= locals.formData ? formData.reorder_level : (locals.ingredient ? ingredient.reorder_level : '5') %>">
+  </div>
+
+  <div class="form-group">
+    <label for="admin_password">Admin Password (Required to save changes):</label>
+    <input type="password" id="admin_password" name="admin_password" required>
+  </div>
+
+  <button type="submit" class="btn-submit">
+    <%= locals.ingredient ? 'Update Ingredient' : 'Create Ingredient' %>
+  </button>
+</form>
+<% if (locals.ingredient) { %>
+  <hr>
+  <section class="danger-zone">
+    <h2>Danger Zone</h2>
+    <p>To delete this ingredient, enter the admin password and click Delete.</p>
+    
+    <form action="/ingredients/<%= ingredient.id %>/delete" method="POST">
+      <div class="form-group">
+        <input type="password" name="admin_password" placeholder="Admin Password" required>
+      </div>
+      <button type="submit" class="btn-delete">Delete Ingredient Permanently</button>
+    </form>
+  </section>
+<% } %>
+<%- include('partials/footer') %>
