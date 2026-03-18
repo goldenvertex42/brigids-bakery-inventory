@@ -1,12 +1,15 @@
 <%- include('./partials/header') %>
-<h1><%= category.name %></h1>
+<div class="category-control">
+  <h1><%= category.name %></h1>
+  <a href="/categories/<%= category.id %>/edit" class="btn-edit-category">Update Category</a>
+</div>
 <p><%= category.description %></p>
 <hr>
 <!-- views/categoryDetail.ejs -->
 <ul class="inventory-list">
   <% items.forEach(item => { %>
     <% const itemPath = category.category_type === 'product' ? 'products' : 'ingredients'; %>
-    <li class="inventory-item <%= (item.quantity_on_hand <= (item.remake_level || item.reorder_level)) ? 'low-stock' : '' %>">
+    <li class="inventory-item <%= (Number(item.quantity_on_hand) <= Number(item.remake_level || item.reorder_level)) ? 'low-stock' : '' %>">
       <div class="item-info">
         <strong><%= item.name %></strong>
         <p><%= item.description %></p>
@@ -15,12 +18,19 @@
           <span>Current Stock: <%= category.category_type === 'ingredient' ? Number(item.quantity_on_hand) : item.quantity_on_hand %> <%= item.unit %><%= item.quantity_on_hand === 1 ? '' : 's' %></span>
           
           <!-- The inline alert circle -->
-          <% if (item.quantity_on_hand <= (item.remake_level || item.reorder_level)) { %>
+          <% if (Number(item.quantity_on_hand) <= Number(item.remake_level || item.reorder_level)) { %>
             <span class="alert-dot inline" title="Needs Attention!">●</span>
           <% } %>
-          </div>
+        </div>
       </div>
-      <a href="/<%= itemPath %>/<%= item.id %>/edit" class="btn-edit">Update Item</a>
+      <div class="link-box">
+        <a href="/<%= itemPath %>/<%= item.id %>/edit" class="btn-edit">Update Item</a>
+        <% if (Number(item.quantity_on_hand) <= Number(item.remake_level || item.reorder_level)) { %>
+          <% if (category.category_type === 'ingredient') { %>
+            <a href="/suppliers/<%= item.supplier_id %>" class="btn-category">Supplier Info</a>
+          <% } %>
+        <% } %>
+      </div>
     </li>
   <% }) %>
 </ul>
