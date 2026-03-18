@@ -2,9 +2,12 @@ const express = require("express");
 const app = express();
 const indexRouter = require("./routes/indexRouter.js");
 const path = require("node:path");
-const db = require("./db/queries");
+const inventoryDb = require("./db/inventoryQueries.js");
+const categoryDb = require("./db/categoryQueries.js")
 const categoryRouter = require("./routes/categoryRouter.js");
 const productRouter = require("./routes/productRouter.js");
+const ingredientRouter = require("./routes/ingredientRouter.js");
+const supplierRouter = require("./routes/supplierRouter.js");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -17,8 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(async (req, res, next) => {
   try {
     const [categories, alertIds] = await Promise.all([
-        db.getSidebarCategories(),
-        db.getCategoriesWithLowStockItems()
+        categoryDb.getSidebarCategories(),
+        inventoryDb.getCategoriesWithLowStockItems()
     ]);
     // Attached to res.locals so it's available in ALL templates
     res.locals.sidebarCategories = categories.map(cat => ({
@@ -35,6 +38,8 @@ app.use(async (req, res, next) => {
 app.use("/", indexRouter);
 app.use("/categories", categoryRouter);
 app.use("/products", productRouter);
+app.use("/ingredients", ingredientRouter);
+app.use("/suppliers", supplierRouter);
 
 const PORT = 3000;
 app.listen(PORT, (error) => {
