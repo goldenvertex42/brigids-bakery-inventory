@@ -32,6 +32,13 @@
     <input type="text" id="address" name="address" value="<%= locals.formData ? formData.address : (locals.supplier ? supplier.address : '') %>">
   </div>
 
+  <% if (locals.supplier) { %>
+  <div class="form-group">
+    <label for="admin_password">Admin Password (Required to save changes):</label>
+    <input type="password" id="admin_password" name="admin_password" required>
+  </div>
+  <% } %>
+
   <button type="submit" class="btn-submit">
     <%= locals.supplier ? 'Update Supplier' : 'Create Supplier' %>
   </button>
