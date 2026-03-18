@@ -252,6 +252,15 @@ hr {
   transition: background 0.2s;
 }
 
+.btn-category.dashboard-btn {
+  background-color: #343a40;
+  margin-left: 16px;
+}
+
+.btn-category.dashboard-btn:hover {
+  background-color: #495057;
+}
+
 .btn-category:hover {
   background-color: #228B22;
 }
