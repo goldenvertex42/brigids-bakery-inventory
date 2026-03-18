@@ -11,10 +11,11 @@ async function getSupplierById(id) {
 }
 
 async function insertSupplier(name, contact_name, email, phone, address) {
-  await pool.query(
-    "INSERT INTO suppliers (name, contact_name, email, phone, address) VALUES ($1, $2, $3, $4, $5)",
-    [name, contact_name, email, phone, address]
-  );
+  const query = `
+    INSERT INTO suppliers (name, contact_name, email, phone, address) VALUES ($1, $2, $3, $4, $5)
+  `;
+  
+  await pool.query(query, [name, contact_name, email, phone, address]);
 }
 
 async function updateSupplier(id, name, contact_name, email, phone, address) {

@@ -2,7 +2,8 @@ const { body, validationResult } = require("express-validator");
 const supplierDb = require("../db/supplierQueries");
 
 const validateSupplier = [
-  body("name").trim().notEmpty().withMessage("Supplier name is required."),
+  body("name").trim().notEmpty().withMessage("Name is required.")
+    .isLength({ max: 255 }).withMessage("Name must be under 255 characters."),
   body("email").optional({ checkFalsy: true }).isEmail().withMessage("Invalid email format."),
   body("phone").optional({ checkFalsy: true }).isMobilePhone().withMessage("Invalid phone number."),
 ];
@@ -10,6 +11,19 @@ const validateSupplier = [
 async function supplierListGet(req, res) {
   const suppliers = await supplierDb.getAllSuppliers();
   res.render("supplierList", { title: "All Suppliers", suppliers });
+}
+
+async function supplierDetailGet(req, res) {
+  const id = req.params.id;
+  try {
+    const supplier = await supplierDb.getSupplierById(id);
+    res.render("supplierDetails", {
+      title: supplier.name + "Details",
+      supplier
+    });
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function supplierCreateGet(req, res) {
@@ -35,7 +49,7 @@ async function supplierUpdateGet(req, res, next) {
     if (!supplier) return next(new Error("Supplier not found"));
 
     res.render("supplierForm", {
-      title: "Edit Supplier",
+      title: "Update Supplier",
       supplier
     })
   } catch (err) {
@@ -54,12 +68,12 @@ async function supplierUpdatePost(req, res, next) {
       const supplier = await supplierDb.getSupplierById(id);
       
       return res.render("supplierForm", { 
-        title: "Edit Supplier", 
+        title: "Update Supplier", 
         supplier: supplier, 
         errors: errors.array(),
         formData: req.body
       });
-    } catch (err) { return next(err); }
+    } catch (err) { next(err); }
   }
 
   try {
@@ -68,11 +82,38 @@ async function supplierUpdatePost(req, res, next) {
   } catch (err) { next(err); }
 }
 
+async function supplierDeletePost(req, res, next) {
+  const { admin_password } = req.body;
+  const supplierId = req.params.id;
+
+  try {
+    const supplier = supplierDb.getSupplierById(supplierId);
+
+
+    if (admin_password !== process.env.ADMIN_PASSWORD) {
+      return res.render("supplierForm", {
+        title: "Update Supplier",
+        supplier: supplier,
+        error: "Incorrect password! Supplier was not deleted."
+      });
+    }
+
+    await supplierDb.deleteSupplier(supplierId);
+
+    res.redirect(`/suppliers`);
+
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
     validateSupplier,
     supplierListGet,
+    supplierDetailGet,
     supplierCreateGet,
     supplierCreatePost,
     supplierUpdateGet,
-    supplierUpdatePost
+    supplierUpdatePost,
+    supplierDeletePost
 }
