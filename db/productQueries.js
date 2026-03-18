@@ -12,7 +12,7 @@ async function getProductById(id) {
 
 async function insertProduct(name, description, category_id, price, quantity, unit, remake_level, image_url) {
   const query = `
-    INSERT INTO products (name, description, category_id, price, unit, quantity_on_hand, remake_level, image_url) 
+    INSERT INTO products (name, description, category_id, price, quantity_on_hand, unit, remake_level, image_url) 
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   `;
   await pool.query(query, [name, description, category_id, price, quantity, unit, remake_level, image_url]);
