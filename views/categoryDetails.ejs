@@ -5,13 +5,14 @@
 <!-- views/categoryDetail.ejs -->
 <ul class="inventory-list">
   <% items.forEach(item => { %>
+    <% const itemPath = category.category_type === 'product' ? 'products' : 'ingredients'; %>
     <li class="inventory-item <%= (item.quantity_on_hand <= (item.remake_level || item.reorder_level)) ? 'low-stock' : '' %>">
       <div class="item-info">
         <strong><%= item.name %></strong>
         <p><%= item.description %></p>
-        <p>$<%= item.price %> a <%= item.unit %></p>
+        <p>$<%= item.price || item.cost_per_unit %> per <%= item.unit %></p>
         <div class="item-stock">
-          <span><%= item.quantity_on_hand %> <%= item.unit %><%= item.quantity_on_hand === 1 ? '' : 's' %></span>
+          <span>Current Stock: <%= category.category_type === 'ingredient' ? Number(item.quantity_on_hand) : item.quantity_on_hand %> <%= item.unit %><%= item.quantity_on_hand === 1 ? '' : 's' %></span>
           
           <!-- The inline alert circle -->
           <% if (item.quantity_on_hand <= (item.remake_level || item.reorder_level)) { %>
@@ -19,7 +20,7 @@
           <% } %>
           </div>
       </div>
-      <a href="/products/<%= item.id %>/edit" class="btn-edit">Update Item</a>
+      <a href="/<%= itemPath %>/<%= item.id %>/edit" class="btn-edit">Update Item</a>
     </li>
   <% }) %>
 </ul>
