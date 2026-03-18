@@ -7,20 +7,20 @@
 <body>
   <div class="app-container">
     <nav class="sidebar">
-      <h3>Categories</h3>
-      <ul>
+      <h2 class="header-name">Categories</h2>
+      <ul class="categories-list">
         <% sidebarCategories.forEach(cat => { %>
           <li>
             <a href="/categories/<%= cat.id %>" class="btn-category">
               <%= cat.name %>
-              <% if (cat.hasAlert) { %>
-                <span class="alert-dot" title="Low stock items detected!">●</span>
-              <% } %>
             </a>
+            <% if (cat.hasAlert) { %>
+              <span class="alert-dot" title="Low stock items detected!">●</span>
+            <% } %>
           </li>
         <% }) %>
       </ul>
-      <h3>Inventory Actions</h3>
+      <h2 class="header-name">Inventory Actions</h2>
       <ul class="actions-list">
         <li><a href="/products/new" class="btn-sidebar">+ Add New Product</a></li>
         <li><a href="/ingredients/new" class="btn-sidebar">+ Add New Ingredient</a></li>
