@@ -73,6 +73,10 @@ hr {
   overflow-y: auto; /* Scrollable sidebar */
 }
 
+.no-categories {
+  color: #ccc;
+}
+
 .header-name {
   margin-left: 0.25rem;
 }
