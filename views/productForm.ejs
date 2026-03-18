@@ -1,59 +1,88 @@
 <%- include('partials/header') %>
 
 <h1>
-  <%= locals.product ? 'Edit Product: ' + product.name : 'Add New Product' %>
+  <%= title %>
 </h1>
 
 <form action="<%= locals.product ? '/products/' + product.id + '/edit' : '/products/new' %>" method="POST">
+  <%- include('partials/error') %>
+  
   <div class="form-group">
     <label for="name">Product Name:</label>
-    <input type="text" id="name" name="name" value="<%= locals.product ? product.name : '' %>" required>
+    <input type="text" id="name" name="name" value="<%= locals.formData ? formData.name : (locals.product ? product.name : '') %>" required>
   </div>
 
   <div class="form-group">
     <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="3" placeholder="Describe the taste, ingredients, or allergens..."><%= locals.product ? product.description : '' %></textarea>
+    <textarea id="description" name="description" rows="3" placeholder="Describe the taste, ingredients, or allergens..."><%= locals.formData ? formData.description : (locals.product ? product.description : '') %></textarea>
   </div>
 
   <div class="form-group">
     <label for="category_id">Category:</label>
-    <select id="category_id" name="category_id">
-    <% categories.forEach(cat => { %>
-      <option value="<%= cat.id %>" <%= (locals.product && product.category_id === cat.id) ? 'selected' : '' %>>
+    <select id="category_id" name="category_id" required>
+      <% categories.forEach(cat => { %>
+      <% 
+        // 1. Check if the user JUST picked this in a failed form submission
+        const isFromForm = locals.formData && Number(formData.category_id) === cat.id;
+        
+        // 2. Check if this is the product's saved category (and no new form data exists)
+        const isFromDB = !locals.formData && locals.product && product.category_id === cat.id;
+        
+        const isSelected = isFromForm || isFromDB;
+      %>
+      <option value="<%= cat.id %>" <%= isSelected ? 'selected' : '' %>>
         <%= cat.name %>
       </option>
-    <% }) %>
-  </select>
+      <% }) %>
+    </select>
   </div>
 
   <div class="form-group">
     <label for="price">Price ($):</label>
-    <input type="number" id="price" name="price" step="0.01" min="0" value="<%= locals.product ? product.price : '' %>" required>
-  </div>
-
-  <div class="form-group">
-    <label for="unit">Unit of Measure:</label>
-    <input type="text" id="unit" name="unit" placeholder="e.g., loaf, dozen, piece" value="<%= locals.product ? product.unit : 'piece' %>">
+    <input type="number" id="price" name="price" step="0.01" min="0" value="<%= locals.formData ? formData.price : (locals.product ? product.price : '') %>" required>
   </div>
 
   <div class="form-group">
     <label for="quantity_on_hand">Initial Stock:</label>
-    <input type="number" id="quantity_on_hand" name="quantity_on_hand" min="0" value="<%= locals.product ? product.quantity_on_hand : '0' %>">
+    <input type="number" id="quantity_on_hand" name="quantity_on_hand" min="0" value="<%= locals.formData ? formData.quantity_on_hand : (locals.product ? product.quantity_on_hand : '0') %>">
+  </div>
+
+  <div class="form-group">
+    <label for="unit">Unit of Measure:</label>
+    <input type="text" id="unit" name="unit" placeholder="e.g., loaf, dozen, piece" value="<%= locals.formData ? formData.unit : (locals.product ? product.unit : 'piece') %>">
   </div>
 
   <div class="form-group">
     <label for="remake_level">Remake Level (Alert threshold):</label>
-    <input type="number" id="remake_level" name="remake_level" min="0" value="<%= locals.product ? product.remake_level : '5' %>">
+    <input type="number" id="remake_level" name="remake_level" min="0" value="<%= locals.formData ? formData.remake_level : (locals.product ? product.remake_level : '5') %>">
   </div>
 
   <div class="form-group">
     <label for="image_url">Image URL:</label>
-    <input type="url" id="image_url" name="image_url" placeholder="https://example.com" value="<%= locals.product ? product.image_url : '' %>">
+    <input type="url" id="image_url" name="image_url" placeholder="https://example.com" value="<%= locals.formData ? formData.image_url : (locals.product ? product.image_url : '') %>">
+  </div>
+
+  <div class="form-group">
+    <label for="admin_password">Admin Password (Required to save changes):</label>
+    <input type="password" id="admin_password" name="admin_password" required>
   </div>
 
   <button type="submit" class="btn-submit">
     <%= locals.product ? 'Update Product' : 'Create Product' %>
   </button>
 </form>
-
+<% if (locals.product) { %>
+  <hr>
+  <section class="danger-zone">
+    <h2>Danger Zone</h2>
+    <p>To delete this product, enter the admin password and click Delete.</p>
+    
+    <form action="/products/<%= product.id %>/delete" method="POST">
+      <div class="form-group">
+        <input type="password" name="admin_password" placeholder="Admin Password" required>
+      </div>
+      <button type="submit" class="btn-delete">Delete Product Permanently</button>
+    </form>
+  </section>
+<% } %>
 <%- include('partials/footer') %>
