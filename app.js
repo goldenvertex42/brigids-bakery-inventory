@@ -52,7 +52,18 @@ app.listen(PORT, (error) => {
   console.log(`Bakery Inventory Management App - listening on PORT ${PORT}!`);
 });
 
+app.use((req, res, next) => {
+  const err = new Error("Not Found");
+  err.status = 404;
+  next(err); // This "pushes" the 404 into your global error handler
+});
+
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send(err);
+  const statusCode = err.status || 500;
+  const message = err.message || "Internal Server Error";
+
+  res.status(statusCode).render("error-page", { 
+    title: "Error",
+    errors: [message] // Wrapping in an array to match your partial's logic
+  });
 });
