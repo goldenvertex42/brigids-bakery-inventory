@@ -1,8 +1,7 @@
 const { Router } = require("express");
 const indexRouter = Router();
+const indexController = require("../controllers/indexController");
 
-indexRouter.get("/", (req, res) => {
-    res.render("index", {title: "Brigid's Bakery Inventory Management"});
-});
+indexRouter.get("", indexController.dashboardCreateGet);
 
 module.exports = indexRouter;

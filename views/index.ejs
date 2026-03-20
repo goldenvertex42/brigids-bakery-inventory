@@ -1,2 +1,39 @@
 <%- include('./partials/header') %>
+<div class="dashboard-container">
+  <div class="ls-product-container db-box">
+    <h2>Low Stock Products</h2>
+    <hr>
+    <ul>
+      <% if (lowStockProducts.length > 0) { %>
+        <% lowStockProducts.forEach(item => { %>
+          <li>
+            <strong><%= item.name %></strong>
+            <p>Current Stock: <%= item.quantity_on_hand %></p>
+            <p>Minimum Stock: <%= item.remake_level %></p>
+          </li>
+        <% }) %>
+      <% } else { %>
+        <li>No products currently need to be made.</li>
+      <% } %>
+    </ul>
+  </div>
+  <div class="ls-ingredient-container db-box">
+    <h2>Low Stock Ingredients</h2>
+    <hr>
+    <ul>
+      <% if (lowStockIngredients.length > 0) { %>
+        <% lowStockIngredients.forEach(item => { %>
+          <li>
+            <strong><%= item.name %></strong>
+            <p>Current Stock: <%= item.quantity_on_hand %></p>
+            <p>Minimum Stock: <%= item.reorder_level %></p>
+            <a href="/suppliers/<%= item.supplier_id %>" class="btn-category">Supplier Info</a>
+          </li>
+        <% }) %>
+      <% } else { %>
+        <li>No ingredients currently need to be ordered.</li>
+      <% } %>
+    </ul>
+  </div>
+</div>
 <%- include('./partials/footer') %>
