@@ -77,6 +77,17 @@ hr {
   color: #ccc;
 }
 
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.db-box {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+}
+
 .header-name {
   margin-left: 0.25rem;
 }
