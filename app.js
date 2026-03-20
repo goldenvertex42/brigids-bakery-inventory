@@ -64,6 +64,6 @@ app.use((err, req, res, next) => {
 
   res.status(statusCode).render("error-page", { 
     title: "Error",
-    errors: [message] // Wrapping in an array to match your partial's logic
+    errors: [{ msg: message }] // Wrapping in an array to match your partial's logic
   });
 });
