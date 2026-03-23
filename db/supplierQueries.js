@@ -1,7 +1,8 @@
 const pool = require("./pool");
 
-async function getAllSuppliers() {
-  const { rows } = await pool.query("SELECT * FROM suppliers ORDER BY name ASC");
+async function getActiveSuppliers() {
+  const query = "SELECT * FROM suppliers WHERE is_active = true ORDER BY name ASC";
+  const { rows } = await pool.query(query);
   return rows;
 }
 
@@ -25,15 +26,28 @@ async function updateSupplier(id, name, contact_name, email, phone, address) {
   );
 }
 
-async function deleteSupplier(id) {
-  // Remember: our schema has ON DELETE SET NULL for ingredients
-  await pool.query("DELETE FROM suppliers WHERE id = $1", [id]);
+async function updateActiveStatus(id, status) {
+  const query = `
+    UPDATE suppliers 
+    SET is_active = $1 
+    WHERE id = $2 
+    RETURNING *;
+  `;
+  
+  const values = [status, id];
+
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows[0]; // Returns the updated supplier record
+  } catch (err) {
+    throw err;
+  }
 }
 
 module.exports = {
-    getAllSuppliers,
+    getActiveSuppliers,
     getSupplierById,
     insertSupplier,
     updateSupplier,
-    deleteSupplier,
+    updateActiveStatus
 }

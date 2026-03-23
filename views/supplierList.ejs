@@ -5,7 +5,12 @@
 <ul class="supplier-list">
   <% suppliers.forEach(supplier => { %>
     <li class="supplier">
-      <strong class="supplier-name"><%= supplier.name %></strong>
+      <div class="title-with-badge">
+        <strong class="supplier-name"><%= supplier.name %></strong>
+        <span class="active-badge <%= supplier.is_active ? 'badge-active' : 'badge-inactive' %> status-badge">
+          <%= supplier.is_active ? 'Active' : 'Deactivated' %>
+        </span>
+      </div>
       <div class="separator"></div>
       <div class="link-box">
         <a href="/suppliers/<%= supplier.id %>/edit" class="btn-edit">Update Supplier</a>
