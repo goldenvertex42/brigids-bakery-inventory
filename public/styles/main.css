@@ -47,6 +47,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* RESET END */
+section {
+  margin: 1rem 0;
+}
 
 a {
   text-decoration: none;
@@ -77,16 +80,67 @@ hr {
   color: #ccc;
 }
 
-.dashboard-container {
+.dashboard-container { 
+  max-width: 1200px; 
+  margin: 2rem auto; 
+  padding: 0 1rem; }
+
+/* Grid Layout */
+.dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-.db-box {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ddd;
+/* Card Styling */
+.card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-top: 4px solid #2c3e50;
 }
+
+.alert-card { 
+  border-top-color: #e74c3c; 
+} /* Red top for alerts */
+
+.card h2 { 
+  font-size: 1.1rem; 
+  margin-bottom: 1rem; 
+  color: #34495e; 
+  border-bottom: 1px solid #eee; 
+  padding-bottom: 0.5rem; }
+
+.card ul, .card ol { 
+  list-style: none; 
+  padding: 0; }
+
+.card li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f9f9f9;
+  font-size: 0.95rem;
+}
+
+.stat-value { 
+  font-weight: bold; 
+  color: #27ae60; 
+}
+
+.stock-count { 
+  color: #e67e22; 
+  font-weight: bold; 
+}
+
+.empty { 
+  color: #999; 
+  font-style: italic; 
+  text-align: center; 
+}
+
 
 .header-name {
   margin-left: 0.25rem;
@@ -310,6 +364,16 @@ hr {
   gap: 1rem;
 }
 
+.title-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between name and badge */
+}
+
+.title-with-badge h1 {
+  margin: 0; /* Remove default margins to keep alignment clean */
+}
+
 .supplier {
   display: flex;
   justify-content: space-between;
@@ -325,4 +389,135 @@ hr {
   flex-grow: 1; /* Line fills the available space */
   height: 1px; /* Line thickness */
   background-color: black; /* Line color */
+}
+
+/* Transaction Table */
+
+/* Container & Header */
+.transaction-container { 
+  max-width: 1000px; 
+  margin: 2rem auto; 
+  font-family: sans-serif; 
+}
+
+.page-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 1.5rem; 
+}
+
+/* Table Styling */
+.audit-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  background: white; 
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+}
+
+.audit-table th { 
+  background: #f8f9fa; 
+  text-align: left; 
+  padding: 12px; 
+  border-bottom: 2px solid #dee2e6; 
+}
+
+.audit-table td { 
+  padding: 12px; 
+  border-bottom: 1px solid #eee; 
+  vertical-align: middle; 
+}
+
+.status-text {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Status Badges */
+.status-badge { 
+  padding: 4px 8px; 
+  border-radius: 12px; 
+  font-size: 0.75rem; 
+  text-transform: uppercase; 
+  font-weight: bold; 
+}
+
+.active-badge {
+  border: 1px black solid;
+}
+
+
+.badge-sale { 
+  background: #d4edda; 
+  color: #155724; 
+}
+
+.badge-waste { 
+  background: #f8d7da; 
+  color: #721c24; 
+}
+
+.badge-restock { 
+  background: #d1ecf1; 
+  color: #0c5460; 
+}
+
+.badge-adjustment { 
+  background: #e2e3e5; 
+  color: #383d41; 
+}
+
+/* Quantity Colors */
+.qty-column { 
+  font-weight: bold; 
+}
+
+.qty-column.pos, .badge-active, .text-success { 
+  color: #28a745;
+  background: #e8f5e9; 
+}
+
+.qty-column.neg, .badge-inactive, .text-danger { 
+  color: #dc3545;
+  background: #fdeaea; 
+}
+
+.description-cell { 
+  color: #666; 
+  font-size: 0.9rem; 
+  font-style: italic; 
+}
+
+/* Banner Styling */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 6px;
+  border-left: 5px solid;
+}
+
+.banner-warning {
+  background-color: #fff3cd; /* Soft yellow */
+  border-color: #ffc107;      /* Strong yellow/gold */
+  color: #856404;            /* Dark brown/gold text */
+}
+
+.banner-content p { 
+  margin: 5px 0 0 0; 
+  font-size: 0.9rem; 
+}
+
+.btn-text-link {
+  background: none;
+  border: none;
+  color: #0056b3;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-weight: bold;
 }
