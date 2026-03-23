@@ -1,39 +1,57 @@
 <%- include('./partials/header') %>
-<div class="dashboard-container">
-  <div class="ls-product-container db-box">
-    <h2>Low Stock Products</h2>
-    <hr>
-    <ul>
-      <% if (lowStockProducts.length > 0) { %>
-        <% lowStockProducts.forEach(item => { %>
+
+<main class="dashboard-container">
+  <h1>Inventory Overview</h1>
+
+  <div class="dashboard-grid">
+    
+    <!-- Widget 1: Low Stock Alerts (Combined) -->
+    <section class="card <% lowStockProducts || lowStockIngredients ? "alert-card" : ""%>">
+      <h2>⚠️ Low Stock Alerts</h2>
+      <ul>
+        <% [...lowStockProducts, ...lowStockIngredients].forEach(item => { %>
           <li>
-            <strong><%= item.name %></strong>
-            <p>Current Stock: <%= item.quantity_on_hand %></p>
-            <p>Minimum Stock: <%= item.remake_level %></p>
+            <span><%= item.name %></span>
+            <span class="stock-count"><%= item.quantity_on_hand %> left</span>
           </li>
         <% }) %>
-      <% } else { %>
-        <li>No products currently need to be made.</li>
-      <% } %>
-    </ul>
-  </div>
-  <div class="ls-ingredient-container db-box">
-    <h2>Low Stock Ingredients</h2>
-    <hr>
-    <ul>
-      <% if (lowStockIngredients.length > 0) { %>
-        <% lowStockIngredients.forEach(item => { %>
+        <% if (lowStockProducts.length === 0 && lowStockIngredients.length === 0) { %>
+          <li class="empty">All stock levels healthy!</li>
+        <% } %>
+      </ul>
+    </section>
+
+    <!-- Widget 2: Top Sellers -->
+    <section class="card">
+      <h2>🏆 Top 5 Sellers</h2>
+      <ol>
+        <% topSellers.forEach(product => { %>
           <li>
-            <strong><%= item.name %></strong>
-            <p>Current Stock: <%= item.quantity_on_hand %></p>
-            <p>Minimum Stock: <%= item.reorder_level %></p>
-            <a href="/suppliers/<%= item.supplier_id %>" class="btn-category">Supplier Info</a>
+            <%= product.name %> 
+            <span class="stat-value"><%= Math.abs(product.total_sold) %> units</span>
           </li>
         <% }) %>
-      <% } else { %>
-        <li>No ingredients currently need to be ordered.</li>
-      <% } %>
-    </ul>
+      </ol>
+    </section>
+
+    <!-- Widget 3: Waste Report -->
+    <section class="card">
+      <h2>📉 Recent Waste</h2>
+      <ul>
+        <% wasteReport.forEach(item => { %>
+          <li>
+            <%= item.item_name %>
+            <span class="stat-value text-danger"><%= Math.abs(item.total_wasted) %> lost</span>
+          </li>
+        <% }) %>
+        <% if (wasteReport.length === 0) { %>
+          <li class="empty">No waste recorded.</li>
+        <% } %>
+      </ul>
+    </section>
+
   </div>
-</div>
+</main>
+
 <%- include('./partials/footer') %>
+
