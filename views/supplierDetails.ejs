@@ -1,7 +1,100 @@
 <%- include('./partials/header') %>
-<h1><%= supplier.name %></h1>
-<p><strong>Contact Name:</strong> <%= supplier.contact_name %></p>
-<p><strong>Email:</strong> <%= supplier.email %></p>
-<p><strong>Phone Number: </strong><%= supplier.phone %></p>
-<p><strong>Address:</strong> <%= supplier.address %></p>
+<% if (!supplier.is_active) { %>
+  <div class="banner banner-warning">
+    <span class="icon">⚠️</span>
+    <div class="banner-content">
+      <strong>Note: This supplier is currently deactivated.</strong>
+      <p>They will not appear in "New Transaction" or "New Ingredient" dropdowns until reactivated.</p>
+    </div>
+  </div>
+<% } %>
+
+<header class="detail-header">
+  <div class="title-with-badge">
+    <h1><%= supplier.name %></h1>
+    <span class="active-badge status-badge <%= supplier.is_active ? 'badge-active' : 'badge-inactive' %>">
+      <%= supplier.is_active ? 'Active' : 'Deactivated' %>
+    </span>
+  </div>
+  <div class="actions">
+    <a href="/suppliers/<%= supplier.id %>/edit" class="btn btn-edit">Edit Supplier</a>
+  </div>
+</header>
+
+<!-- Section 1: Contact Cards -->
+<section class="info-grid">
+  <div class="info-card">
+    <h3>Contact Information</h3>
+    <p><strong>Name:</strong> <%= supplier.contact_name %></p>
+    <p><strong>Email:</strong> <a href="mailto:<%= supplier.email %>"><%= supplier.email %></a></p>
+    <p><strong>Phone:</strong> <%= supplier.phone %></p>
+  </div>
+  <div class="info-card">
+    <h3>Business Address</h3>
+    <p><%= supplier.address %></p>
+  </div>
+</section>
+
+<!-- Section 2: Supplied Ingredients -->
+<section class="data-section">
+  <h2>Ingredients Provided</h2>
+  <% if (ingredients.length > 0) { %>
+    <div class="table-wrapper">
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Current Stock</th>
+            <th>Unit</th>
+            <th>Reorder Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% ingredients.forEach(ing => { %>
+            <tr class="<%= Number(ing.quantity_on_hand) <= Number(ing.reorder_level) ? 'row-alert' : '' %>">
+              <td><a href="/ingredients/<%= ing.id %>/edit"><%= ing.name %></a></td>
+              <td><%= ing.quantity_on_hand %></td>
+              <td><%= ing.unit %></td>
+              <td><%= ing.reorder_level %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p class="empty-state">This supplier isn't linked to any ingredients yet.</p>
+  <% } %>
+</section>
+
+<!-- Section 3: Recent Transactions -->
+<section class="data-section">
+  <h2>Recent Deliveries (Restocks)</h2>
+  <div class="table-wrapper">
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (transactions.length > 0) { %>
+          <% transactions.forEach(t => { %>
+            <tr>
+              <td><%= new Date(t.created_at).toLocaleDateString() %></td>
+              <td><%= t.ingredient_name %></td>
+              <td class="text-success">+<%= t.quantity %></td>
+              <td><%= t.description %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="4" class="text-center">No delivery history found.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <%- include('./partials/footer') %>

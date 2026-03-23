@@ -1,4 +1,6 @@
 const { body, validationResult } = require("express-validator");
+const ingredientDb = require("../db/ingredientQueries");
+const transactionDb = require("../db/transactionQueries");
 const supplierDb = require("../db/supplierQueries");
 
 const validateSupplier = [
@@ -9,20 +11,38 @@ const validateSupplier = [
 ];
 
 async function supplierListGet(req, res) {
-  const suppliers = await supplierDb.getAllSuppliers();
+  const suppliers = await supplierDb.getActiveSuppliers();
   res.render("supplierList", { title: "All Suppliers", suppliers });
 }
 
-async function supplierDetailGet(req, res) {
-  const id = req.params.id;
+async function supplierDetailGet(req, res, next) {
   try {
-    const supplier = await supplierDb.getSupplierById(id);
+    const { id } = req.params;
+
+    // Run queries in parallel
+    const [supplier, ingredients, transactions] = await Promise.all([
+      supplierDb.getSupplierById(id),
+      ingredientDb.getIngredientsBySupplier(id),
+      transactionDb.getTransactionsBySupplier(id)
+    ]);
+
+    // 1. Safety Check: If supplier doesn't exist in DB
+    if (!supplier) {
+      const err = new Error("Supplier not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    // 2. Render with data (ingredients and transactions default to [] if empty)
     res.render("supplierDetails", {
-      title: supplier.name + "Details",
-      supplier
+      title: `${supplier.name} Details`,
+      supplier,
+      ingredients: ingredients || [],
+      transactions: transactions || []
     });
+
   } catch (err) {
-    next(err);
+    next(err); // Passes DB connection errors to global handler
   }
 }
 
@@ -82,30 +102,31 @@ async function supplierUpdatePost(req, res, next) {
   } catch (err) { next(err); }
 }
 
-async function supplierDeletePost(req, res, next) {
+async function supplierToggleActivePost(req, res, next) {
   const { admin_password } = req.body;
-  const supplierId = req.params.id;
+  const { id } = req.params;
 
   try {
-    const supplier = supplierDb.getSupplierById(supplierId);
-
+    const supplier = await supplierDb.getSupplierById(id);
 
     if (admin_password !== process.env.ADMIN_PASSWORD) {
-      return res.render("supplierForm", {
-        title: "Update Supplier",
-        supplier: supplier,
-        error: "Incorrect password! Supplier was not deleted."
+      return res.render("supplierDetails", {
+        supplier,
+        error: "Incorrect admin password!"
       });
     }
 
-    await supplierDb.deleteSupplier(supplierId);
+    // Toggle the status: if true, make false (and vice versa)
+    const newStatus = !supplier.is_active;
+    await supplierDb.updateActiveStatus(id, newStatus);
 
-    res.redirect(`/suppliers`);
-
+    res.redirect(`/suppliers/${id}`);
   } catch (err) {
     next(err);
   }
 }
+
+
 
 module.exports = {
     validateSupplier,
@@ -115,5 +136,5 @@ module.exports = {
     supplierCreatePost,
     supplierUpdateGet,
     supplierUpdatePost,
-    supplierDeletePost
+    supplierToggleActivePost
 }
