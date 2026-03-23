@@ -1,0 +1,86 @@
+<%- include('./partials/header') %>
+
+<form action="/transactions/new" method="POST">
+  
+  <!-- Product Selection (Optional) -->
+  <div class="product-selection form-group">
+    <label for="product_id">Product (Optional):</label>
+    <select name="product_id" id="product_id" onchange="toggleSections()">
+      <option value="">-- Select a Product --</option>
+      <% products.forEach(product => { %>
+        <option value="<%= product.id %>"><%= product.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <!-- Ingredient Selection (Optional) -->
+  <div class="ingredient-selection form-group">
+    <label for="ingredient_id">Ingredient (Optional):</label>
+    <select name="ingredient_id" id="ingredient_id" onchange="toggleSections()">
+      <option value="">-- Select an Ingredient --</option>
+      <% ingredients.forEach(ing => { %>
+        <option value="<%= ing.id %>"><%= ing.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <!-- Transaction Type -->
+  <div class="form-group">
+    <label for="type">Type:</label>
+    <select name="type" id="type" required>
+      <option value="sale">Sale</option>
+      <option value="restock">Restock</option>
+      <option value="waste">Waste</option>
+      <option value="adjustment">Adjustment</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" required step="0.01">
+  </div>
+
+  <div class="form-group">
+    <label for="description">Notes / Description:</label>
+    <textarea 
+      name="description" 
+      id="description" 
+      placeholder="e.g., Damaged during delivery or Customer order #101"
+      rows="3"
+    ><%= locals.formData ? formData.description : '' %></textarea>
+  </div>
+
+  <button type="submit" class="btn-submit">Record Transaction</button>
+</form>
+
+<script>
+  function toggleSections() {
+    const productSelect = document.getElementById('product_id');
+    const ingredientSelect = document.getElementById('ingredient_id');
+
+    const productSection = document.querySelector('.product-selection');
+    const ingredientSection = document.querySelector('.ingredient-selection');
+
+    // 1. If a Product is selected, hide Ingredients
+    if (productSelect.value) {
+      ingredientSection.style.display = 'none';
+      productSection.style.display = 'flex';
+    } 
+    // 2. If an Ingredient is selected, hide Products
+    else if (ingredientSelect.value) {
+      productSection.style.display = 'none';
+      ingredientSection.style.display = 'flex';
+    } 
+    // 3. If neither is selected (User cleared it), show both
+    else {
+      productSection.style.display = 'flex';
+      ingredientSection.style.display = 'flex';
+    }
+  }
+
+  // 4. Run it immediately on page load to set the correct initial state
+  window.addEventListener('DOMContentLoaded', toggleSections);
+</script>
+
+
+<%- include('./partials/footer') %>
