@@ -53,10 +53,13 @@
     <input type="number" id="cost_per_unit" name="cost_per_unit" step="0.01" min="0" value="<%= locals.formData ? formData.cost_per_unit : (locals.ingredient ? ingredient.cost_per_unit : '') %>" required>
   </div>
 
+  <% if (locals.ingredient) { %>
   <div class="form-group">
-    <label for="quantity_on_hand"><%= locals.ingredient ? 'Current' : 'Initial' %> Stock:</label>
-    <input type="number" id="quantity_on_hand" name="quantity_on_hand" min="0" value="<%= locals.formData ? formData.quantity_on_hand : (locals.ingredient ? ingredient.quantity_on_hand : '0') %>">
+    <label>Current Stock (Read-only):</label>
+    <input type="text" value="<%= ingredient.quantity_on_hand %>" disabled>
+    <p><small>To change stock, please <a href="/transactions/new">record a transaction</a>.</small></p>
   </div>
+  <% } %>
 
   <div class="form-group">
     <label for="unit">Unit of Measure:</label>

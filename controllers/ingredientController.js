@@ -9,14 +9,13 @@ const validateIngredient = [
     .isLength({ max: 255 }).withMessage("Name must be under 255 characters."),
   body("supplier_id").isInt({ min: 0 }).withMessage("Supplier ID number must be 0 or higher."),
   body("cost_per_unit").isFloat({ min: 0 }).withMessage("Cost must be a positive number."),
-  body("quantity_on_hand").isInt({ min: 0 }).withMessage("Stock cannot be negative."),
   body("reorder_level").isInt({ min: 0 }).withMessage("Reorder level must be 0 or higher."),
 ];
 
 async function ingredientCreateGet(req, res) {
   const [categories, suppliers] = await Promise.all([
     categoryDb.getIngredientCategories(),
-    supplierDb.getAllSuppliers()
+    supplierDb.getActiveSuppliers()
   ]);
   res.render("ingredientForm", { title: "Add New Ingredient", categories, suppliers });
 }
@@ -26,7 +25,7 @@ async function ingredientCreatePost(req, res, next) {
   if (!errors.isEmpty()) {
     const [categories, suppliers] = await Promise.all([
       categoryDb.getIngredientCategories(),
-      supplierDb.getAllSuppliers()
+      supplierDb.getActiveSuppliers()
     ]);
     return res.render("ingredientForm", {
       title: "Error",
@@ -38,9 +37,9 @@ async function ingredientCreatePost(req, res, next) {
   }
   
   try {
-    const { name, category_id, cost_per_unit, quantity_on_hand, unit, reorder_level } = req.body;
+    const { name, category_id, cost_per_unit, unit, reorder_level } = req.body;
     const supplier_id = req.body.supplier_id === "" ? null : req.body.supplier_id;
-    await ingredientDb.insertIngredient(name, category_id, supplier_id, cost_per_unit, quantity_on_hand, unit, reorder_level);
+    await ingredientDb.insertIngredient(name, category_id, supplier_id, cost_per_unit, unit, reorder_level);
     res.redirect(`/categories/${category_id}`);
   } catch (err) {
     next(err);
@@ -51,7 +50,7 @@ async function ingredientUpdateGet(req, res, next) {
   try {
     const ingredient = await ingredientDb.getIngredientById(req.params.id);
     const categories = await categoryDb.getIngredientCategories();
-    const suppliers = await supplierDb.getAllSuppliers();
+    const suppliers = await supplierDb.getActiveSuppliers();
 
     if (!ingredient) return next(new Error("Ingredient not found"));
 
@@ -67,7 +66,7 @@ async function ingredientUpdateGet(req, res, next) {
 }
 
 async function ingredientUpdatePost(req, res, next) {
-  const { admin_password, name, category_id, cost_per_unit, quantity_on_hand, unit, reorder_level } = req.body;
+  const { admin_password, name, category_id, cost_per_unit, unit, reorder_level } = req.body;
   const id = req.params.id;
   const supplier_id = req.body.supplier_id === "" ? null : req.body.supplier_id;
 
@@ -77,7 +76,7 @@ async function ingredientUpdatePost(req, res, next) {
     try {
       const ingredient = await ingredientDb.getIngredientById(id);
       const categories = await categoryDb.getIngredientCategories();
-      const suppliers = await supplierDb.getAllSuppliers();
+      const suppliers = await supplierDb.getActiveSuppliers();
       
       return res.render("ingredientForm", { 
         title: "Update Ingredient", 
@@ -92,7 +91,7 @@ async function ingredientUpdatePost(req, res, next) {
   }
 
   try {
-    await ingredientDb.updateIngredient(id, name, category_id, supplier_id, cost_per_unit, quantity_on_hand, unit, reorder_level);
+    await ingredientDb.updateIngredient(id, name, category_id, supplier_id, cost_per_unit, unit, reorder_level);
     res.redirect(`/categories/${category_id}`);
   } catch (err) { next(err); }
 }
@@ -109,7 +108,7 @@ async function ingredientDeletePost(req, res, next) {
 
     if (admin_password !== process.env.ADMIN_PASSWORD) {
       const categories = await categoryDb.getIngredientCategories();
-      const suppliers = await supplierDb.getAllSuppliers();
+      const suppliers = await supplierDb.getActiveSuppliers();
 
       return res.render("ingredientForm", {
         title: "Update Ingredient",

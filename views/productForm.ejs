@@ -42,10 +42,13 @@
     <input type="number" id="price" name="price" step="0.01" min="0" value="<%= locals.formData ? formData.price : (locals.product ? product.price : '') %>" required>
   </div>
 
+  <% if (locals.product) { %>
   <div class="form-group">
-    <label for="quantity_on_hand"><%= locals.product ? 'Current' : 'Initial' %> Stock:</label>
-    <input type="number" id="quantity_on_hand" name="quantity_on_hand" min="0" value="<%= locals.formData ? formData.quantity_on_hand : (locals.product ? product.quantity_on_hand : '0') %>">
+    <label>Current Stock (Read-only):</label>
+    <input type="text" value="<%= product.quantity_on_hand %>" disabled>
+    <p><small>To change stock, please <a href="/transactions/new">record a transaction</a>.</small></p>
   </div>
+  <% } %>
 
   <div class="form-group">
     <label for="unit">Unit of Measure:</label>

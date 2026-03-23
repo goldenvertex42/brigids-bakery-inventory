@@ -8,7 +8,6 @@ const validateProduct = [
     .isLength({ max: 255 }).withMessage("Name must be under 255 characters."),
   body("description").trim().escape(), // Sanitization: prevents XSS
   body("price").isFloat({ min: 0 }).withMessage("Price must be a positive number."),
-  body("quantity_on_hand").isInt({ min: 0 }).withMessage("Stock cannot be negative."),
   body("remake_level").isInt({ min: 0 }).withMessage("Remake level must be 0 or higher."),
 ];
 
@@ -33,8 +32,8 @@ async function productCreatePost(req, res, next) {
   }
   
   try {
-    const { name, description, category_id, price, quantity_on_hand, unit, remake_level, image_url } = req.body;
-    await productDb.insertProduct(name, description, category_id, price, quantity_on_hand, unit, remake_level, image_url);
+    const { name, description, category_id, price, unit, remake_level, image_url } = req.body;
+    await productDb.insertProduct(name, description, category_id, price, unit, remake_level, image_url);
     res.redirect(`/categories/${category_id}`);
   } catch (err) {
     next(err);
@@ -59,7 +58,7 @@ async function productUpdateGet(req, res, next) {
 }
 
 async function productUpdatePost(req, res, next) {
-  const { admin_password, name, description, category_id, price, quantity_on_hand, unit, remake_level, image_url } = req.body;
+  const { admin_password, name, description, category_id, price, unit, remake_level, image_url } = req.body;
   const id = req.params.id;
 
   const errors = validationResult(req);
@@ -81,7 +80,7 @@ async function productUpdatePost(req, res, next) {
   }
 
   try {
-    await productDb.updateProduct(id, name, description, category_id, price, quantity_on_hand, unit, remake_level, image_url);
+    await productDb.updateProduct(id, name, description, category_id, price, unit, remake_level, image_url);
     res.redirect(`/categories/${category_id}`);
   } catch (err) { next(err); }
 }
