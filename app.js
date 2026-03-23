@@ -8,6 +8,7 @@ const categoryRouter = require("./routes/categoryRouter.js");
 const productRouter = require("./routes/productRouter.js");
 const ingredientRouter = require("./routes/ingredientRouter.js");
 const supplierRouter = require("./routes/supplierRouter.js");
+const transactionRouter = require("./routes/transactionRouter.js");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -40,6 +41,7 @@ app.use("/categories", categoryRouter);
 app.use("/products", productRouter);
 app.use("/ingredients", ingredientRouter);
 app.use("/suppliers", supplierRouter);
+app.use("/transactions", transactionRouter);
 
 const PORT = 3000;
 app.listen(PORT, (error) => {
