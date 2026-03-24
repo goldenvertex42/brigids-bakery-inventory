@@ -3,7 +3,9 @@ const app = express();
 const indexRouter = require("./routes/indexRouter.js");
 const path = require("node:path");
 const inventoryDb = require("./db/inventoryQueries.js");
-const categoryDb = require("./db/categoryQueries.js")
+const categoryDb = require("./db/categoryQueries.js");
+const productDb = require("./db/productQueries.js");
+const ingredientDb = require("./db/ingredientQueries.js");
 const categoryRouter = require("./routes/categoryRouter.js");
 const productRouter = require("./routes/productRouter.js");
 const ingredientRouter = require("./routes/ingredientRouter.js");
@@ -17,7 +19,7 @@ const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 app.use(express.urlencoded({ extended: true }));
 
-// Global middleware to populate sidebar categories
+// Global middleware to populate sidebar categories and track the current active page
 app.use(async (req, res, next) => {
   try {
     const [categories, alertIds] = await Promise.all([
@@ -30,6 +32,31 @@ app.use(async (req, res, next) => {
         hasAlert: alertIds.includes(cat.id)
     }));
      
+    const path = req.path;
+
+    // Identify main sections
+    if (path === '/') res.locals.activePage = 'dashboard';
+    else if (path.startsWith('/suppliers')) res.locals.activePage = 'suppliers';
+    else if (path.startsWith('/transactions')) res.locals.activePage = 'transactions';
+
+    // Identify specific category ID from URL
+    const categoryMatch = path.match(/\/categories\/(\d+)/);
+    res.locals.currentCategoryId = categoryMatch ? categoryMatch[1] : null;
+
+    // Identify specific category ID of an item being edited
+    if (path.includes('/edit')) {
+    const productMatch = path.match(/\/products\/(\d+)/);
+    const ingredientMatch = path.match(/\/ingredients\/(\d+)/);
+    
+    if (productMatch) {
+        const product = await productDb.getProductById(productMatch[1]);
+        if (product) res.locals.currentCategoryId = product.category_id;
+    } else if (ingredientMatch) {
+        const ingredient = await ingredientDb.getIngredientById(ingredientMatch[1]);
+        if (ingredient) res.locals.currentCategoryId = ingredient.category_id;
+    }
+  }
+
     next();
   } catch (err) {
     next(err); // Pass errors to your Express error handler
