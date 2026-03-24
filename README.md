@@ -1,2 +1,9 @@
 # brigids-bakery-inventory
-An inventory management app for an imaginary bakery created using Express and PostgreSQL
+An inventory management app for an imaginary bakery created using Express and PostgreSQL;
+
+This inventory management app centers around a database of categories, products, ingredients, suppliers, and transactions. A user can create, read, update, and delete most of these entities using this application. The only exceptions to this is that transactions cannot be updated or deleted in order to maintain data integrity, and suppliers cannot be deleted for the same reason; suppliers can be deactivated and activated using an admin password. As for now, categories, products, and ingredients can be deleted, but they are set to cascade the deletion, so the action can be a dangerous one. Due to this, the delete functionality has been separated to the bottom of each update form and protected by requiring an admin password as well as a confirmation modal to ensure deliberate action. 
+
+The populate db file contains SQL to create our schema, setup a couple of triggers, and seed initial dummy data into the database. The triggers consist of a check/auto-fetch for a supplier ID before inserting a new ingredient transaction, and the updating of stock levels of the item based on if it's a product or an ingredient after inserting a new transaction.
+
+While the project in its current state is usable, I plan to add and alter it to improve upon a potential user's experience. My plans include adding an orders table for grouping transactions, adding an "is_deleted" column to the categories, products, and ingredients tables to implement "soft deletion" in order to maintain data integrity when changes in the menu/inventory occur, and adding a "Low Stock Report" which could be filtered in different ways to give the user different insights/inventory reports that could be printed and/or used for ordering or invoices.
+
