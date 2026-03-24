@@ -12,13 +12,13 @@
   </label>
   <div class="app-container">
     <nav class="sidebar">
-      <a href="/" class="btn-category dashboard-btn">Dashboard</a>
+      <a href="/" class="btn-category dashboard-btn <%= locals.activePage === 'dashboard' ? 'active' : '' %>">Dashboard</a>
       <h2 class="header-name">Categories</h2>
       <ul class="categories-list">
         <% if (sidebarCategories && sidebarCategories.length > 0) { %>
           <% sidebarCategories.forEach(cat => { %>
             <li>
-              <a href="/categories/<%= cat.id %>" class="btn-category">
+              <a href="/categories/<%= cat.id %>" class="btn-category <%= (locals.currentCategoryId == cat.id) ? 'active' : '' %>">
                 <%= cat.name %>
               </a>
               <% if (cat.hasAlert) { %>
@@ -36,9 +36,10 @@
         <li><a href="/ingredients/new" class="btn-sidebar">+ Add New Ingredient</a></li>
         <li><a href="/categories/new" class="btn-sidebar">+ Add New Category</a></li>
         <li><a href="/suppliers/new" class="btn-sidebar">+ Add New Supplier</a></li>
-        <li><a href="/suppliers" class="btn-category">View All Suppliers</a></li>
-        <li><a href="/transactions" class="btn-category">View Transaction History</a></li>
+        <li><a href="/suppliers" class="btn-category <%= locals.activePage === 'suppliers' ? 'active' : '' %>">View All Suppliers</a></li>
+        <li><a href="/transactions" class="btn-category <%= locals.activePage === 'transactions' ? 'active' : '' %>">View Transaction History</a></li>
 
       </ul>
     </nav>
+    <label for="menu-toggle" class="menu-overlay"></label>
     <main class="content">

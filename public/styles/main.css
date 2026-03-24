@@ -83,6 +83,20 @@ hr {
   display: none;
 }
 
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Dimmed background */
+  z-index: 998; /* Just below the sidebar (999) but above content */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
 .no-categories {
   color: #ccc;
 }
@@ -322,6 +336,18 @@ hr {
   font-size: 0.9rem;
   text-align: center;
   transition: background 0.2s;
+}
+
+.btn-category.active, .btn-category.dashboard-btn.active {
+  background-color: #f39c12; /* A bright, professional blue */
+  color: #ffffff;            /* Keep text white for high contrast */
+  font-weight: 600;
+  border-left: 5px solid #d35400; /* A slightly darker blue edge */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1); /* Subtle depth */
+}
+
+.btn-category.active:hover, .btn-category.dashboard-btn.active:hover {
+  background-color: #e67e22; 
 }
 
 .btn-category.dashboard-btn {
@@ -610,6 +636,12 @@ hr {
   /* 3. The "Magic": Show sidebar when checkbox is checked */
   .menu-checkbox:checked ~ .app-container .sidebar {
     left: 0;
+  }
+
+  .menu-checkbox:checked ~ .app-container .menu-overlay {
+    display: block;
+    opacity: 1;
+    pointer-events: auto; /* Allows clicking to close */
   }
 
   /* 4. Adjust content to take full width on mobile */
