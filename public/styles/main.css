@@ -71,9 +71,16 @@ hr {
 
 .sidebar {
   width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   background: #f4f4f4;
   border-right: 1px solid #ddd;
   overflow-y: auto; /* Scrollable sidebar */
+}
+
+.menu-checkbox, .hamburger {
+  display: none;
 }
 
 .no-categories {
@@ -520,4 +527,94 @@ hr {
   cursor: pointer;
   padding: 0;
   font-weight: bold;
+}
+
+/* Mobile-specific styles for your audit table */
+@media (max-width: 600px) {
+  .audit-table, .audit-table thead, .audit-table tbody, .audit-table th, .audit-table td, .audit-table tr {
+    display: block; /* Stack everything vertically */
+  }
+
+  .audit-table thead {
+    display: none; /* Hide the headers (we'll use labels instead) */
+  }
+
+  .audit-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .audit-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* Add a "Label" before the data using a data-attribute if you want, 
+     or just let the data speak for itself */
+  .audit-table td::before {
+    font-weight: bold;
+    color: #666;
+  }
+
+  .app-container, .transaction-container {
+    padding: 0 15px;
+  }
+  
+  .detail-header {
+    flex-direction: column; /* Stack Title and "Edit" button */
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .hamburger {
+    display: flex;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    width: 44px; /* Accessible touch target size */
+    height: 44px;
+    background: #2c3e50;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  /* Create the "three-bar" icon using a span and pseudo-elements */
+  .hamburger span, .hamburger span::before, .hamburger span::after {
+    display: block; width: 25px; height: 3px; background: white; border-radius: 2px; position: relative;
+  }
+  .hamburger span::before { content: ""; position: absolute; top: -8px; }
+  .hamburger span::after { content: ""; position: absolute; top: 8px; }
+
+  /* 2. Hide the Sidebar off-screen */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    padding-top: 60px;
+    left: -260px; /* Start hidden to the left */
+    width: 250px;
+    height: 100%;
+    z-index: 999;
+    transition: left 0.3s ease; /* Smooth slide-in effect */
+    background: #fff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+  }
+
+  /* 3. The "Magic": Show sidebar when checkbox is checked */
+  .menu-checkbox:checked ~ .app-container .sidebar {
+    left: 0;
+  }
+
+  /* 4. Adjust content to take full width on mobile */
+  .content {
+    width: 100%;
+    padding-top: 70px; /* Space for the fixed hamburger icon */
+  }
 }

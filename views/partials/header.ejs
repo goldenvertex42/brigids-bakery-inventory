@@ -2,9 +2,14 @@
 <html>
 <head>
   <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
+  <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+  <label for="menu-toggle" class="hamburger">
+    <span></span> <!-- The 3 bars of the hamburger -->
+  </label>
   <div class="app-container">
     <nav class="sidebar">
       <a href="/" class="btn-category dashboard-btn">Dashboard</a>
