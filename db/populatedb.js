@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS ingredients (
   cost_per_unit DECIMAL(10, 2) NOT NULL CHECK (cost_per_unit >= 0),
   quantity_on_hand DECIMAL(10, 2) DEFAULT 0 CHECK (quantity_on_hand >= 0),
   unit VARCHAR(50) NOT NULL,
-  reorder_level DECIMAL(10, 2) DEFAULT 10.0
+  reorder_level DECIMAL(10, 2) DEFAULT 5.0
 );
 
 CREATE TABLE IF NOT EXISTS transactions (
@@ -79,7 +79,6 @@ const TRIGGERS = `
   FOR EACH ROW EXECUTE FUNCTION handle_transaction_logic();
 
   -- 3. Create the AFTER INSERT Trigger for updating stock levels
-  -- (Keep your existing stock update logic here or merge it into the BEFORE trigger)
   CREATE OR REPLACE FUNCTION update_stock_level()
   RETURNS TRIGGER AS $$
   BEGIN
