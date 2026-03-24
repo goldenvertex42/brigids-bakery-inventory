@@ -6,7 +6,7 @@
   <div class="dashboard-grid">
     
     <!-- Widget 1: Low Stock Alerts (Combined) -->
-    <section class="card <% lowStockProducts || lowStockIngredients ? "alert-card" : ""%>">
+    <section class="card <%= (lowStockProducts?.length > 0 || lowStockIngredients?.length > 0) ? "alert-card" : "" %>">
       <h2>⚠️ Low Stock Alerts</h2>
       <ul>
         <% [...lowStockProducts, ...lowStockIngredients].forEach(item => { %>
