@@ -92,7 +92,7 @@
       <div class="form-group">
         <input type="password" name="admin_password" placeholder="Admin Password" required>
       </div>
-      <button type="submit" class="btn-delete">Delete Ingredient Permanently</button>
+      <button type="submit" class="btn-delete" onclick="return confirm('Are you sure? This will delete all transaction history for this item!')">Delete Ingredient Permanently</button>
     </form>
   </section>
 <% } %>

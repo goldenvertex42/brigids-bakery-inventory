@@ -57,7 +57,7 @@
       <div class="form-group">
         <input type="password" name="admin_password" placeholder="Admin Password" required>
       </div>
-      <button type="submit" class="btn-delete">Delete Category Permanently</button>
+      <button type="submit" class="btn-delete" onclick="return confirm('Are you sure? This will delete the category and all items and their transaction histories within it!')">Delete Category Permanently</button>
     </form>
   </section>
 <% } %>
