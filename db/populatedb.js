@@ -136,7 +136,8 @@ INSERT INTO transactions (product_id, type, quantity, description) VALUES
 `;
 
 async function main() {
-  const client = new Client({ connectionString: process.env.DATABASE_URL });
+  const connectionString = process.argv[2] || process.env.DATABASE_URL;
+  const client = new Client({ connectionString: connectionString });
   await client.connect();
   const res = await client.query("SELECT current_database(), current_user, inet_server_addr(), inet_server_port();");
   console.log("Connected to:", res.rows[0]);
